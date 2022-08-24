@@ -1,0 +1,280 @@
+# An Ecological Modeler’s Primer on R
+
+```{r, include=FALSE, warning=F, message=F}
+# data mgmt
+library(tidyverse)
+library(lubridate)
+# visualization
+library(scales)
+library(viridis)
+```
+
+## Part 1
+
+Selected commands from Part I of the Primer.
+
+### 3.3 Writing scripts
+
+```{r, warning=F, message=F}
+r = .2
+N0 = 100
+N1 = N0*exp(r)
+N1
+N0
+# no value assigned to N2
+# N2
+```
+
+### 3.5 Accessing libraries
+
+```{r, warning=F, message=F}
+# install package `popbio`
+package_list <- c("popbio")
+# for loop to download the packages defined in "package_list"
+for(package in package_list){
+  if(!require(package, character.only = TRUE)){
+    # install the package
+    install.packages(package, repos='http://cran.us.r-project.org'); 
+    # load the library
+    library(package, character.only = TRUE)
+  }
+}
+
+# list functions available in popbio
+ls(package:popbio)
+
+```
+
+### 3.6 Commenting your code
+
+```{r, warning=F, message=F}
+# intrinsic rate of increase
+r = .2
+# initial population size
+N0 = 100
+# Calculate new population size after one unit of time
+N1 = N0*exp(r)
+# Output new population size to console
+N1
+```
+
+### 3.9 Getting help
+
+```{r, warning=F, message=F}
+# help
+help(eigen.analysis)
+
+# example
+# example(plot)
+
+# brings up a list of all of the functions that are related to some general topic.
+apropos("plot")
+
+```
+
+## Part II
+
+### 4.3 Numbers
+
+```{r, warning=F, message=F}
+# utilize variables defined above
+N1 = 100*exp(r)
+# set N0 equal to 100
+N0 = 100
+```
+
+### 4.4 Order of operations
+
+```{r, warning=F, message=F}
+# parentheses matter 
+1000*1.06^20/12
+# parentheses matter 
+100*1.06*(20/12)
+
+# see pi
+pi
+```
+
+## Exercise: The diameter of the earth
+
+```{r, warning=F, message=F}
+# enter an equation to calculate the diameter of the earth
+circum_mi <- 24901.55
+circum_km <- circum_mi / 0.621
+earth.diameter = circum_km / pi
+earth.diameter
+```
+
+### 5.3 Vectors
+
+```{r, warning=F, message=F}
+# create a vector
+v1 = c(234, 17, 42.5, 64)
+v1
+# access third element of vector
+v1[3]
+# vector with strings
+study.areas = c("Maybell", "Poudre", "Gunnison")
+```
+
+## Exercise: Vectors 1
+
+```{r, warning=F, message=F}
+# What is the value of v1[2]?
+v1[2]
+# vector of ages
+ages = c(22, 25, 26, 36)
+# vector of names
+names = c("Brynn", "Caroline", "Carolyn", "George")
+# Output the value of the fourth element of v1
+v1[4]
+# Multiply the second element of v1 by 2. 
+v1[2] * 2
+# Enter v1[1:3] in the console.
+v1[1:3]
+# What does the : operator do?
+print("the `:` operator creates a list from the value before the `:` to the value after the `:`")
+```
+  
+## Exercise: logical operations on vectors
+
+```{r, warning=F, message=F}
+# filter v1 in various ways
+v1; v1 < 200; v1[v1 < 200] 
+# form a new vector from the from elements of v1 containing elements that are 
+# a) greater than twenty 
+a = v1[v1>20]
+# b) less than 200 and greater than 20
+b = v1[v1>20 & v1<200]
+# c) not equal to 17
+c = v1[v1!=17]
+# d) equal to 17 or equal to 42.5
+c = v1[v1==17 | v1==42.5]
+xx = c(17, 42.5)
+c = v1[v1 %in% xx]
+```
+
+## Exercise: vector functions
+
+```{r, warning=F, message=F}
+# Find the mean, max, minimum, range, and variance of v1.
+print(paste("The mean of v1 is", mean(v1)))
+print(paste("The max of v1 is", max(v1)))
+print(paste("The min of v1 is", min(v1)))
+range(v1)
+print(paste("The var of v1 is", var(v1)))
+
+# Compose another vector v2 containing 4 numeric values of your choice. 
+v2 = c(20:24)
+
+# Now, execute the commands min(v1,v2)
+min(v1,v2)
+pmin(v1,v2)
+
+print("pmin returns the minimum of all the values present in their argument")
+
+```
+
+## Exercise: more vector functions
+
+```{r, warning=F, message=F}
+d = numeric(5)
+d
+(d + 1) /3
+length(d)
+print("d is a numeric vector of length 5 with all values set to 0; math can be performed for each value in the vector")
+# declare undefined vector
+v = NULL
+v[8] = 254
+v[2] = 10
+v
+typeof(v)
+v[12] = 13.4
+v
+typeof(v)
+print("initially v was a vector that had double numeric values, when the value with the decimal was included R printed the double value with the decimal place")
+```
+
+### 5.3.6 Creating special vectors
+
+```{r, warning=F, message=F}
+v = seq(1,10)
+rep(c("apple", "bookshelf"),5)
+```
+
+## Exercise: Creating a matrix
+
+```{r, warning=F, message=F}
+# Create and output a matrix named B that contains seven
+#  columns and 5 rows with all elements containing the value 7
+mtrx_dta = c(7)
+B = matrix(mtrx_dta, nrow=5, ncol=7, byrow=TRUE)
+B
+# specifies all of the elements in the second column of the matrix
+B[,2]
+# specifies all of the elements of the fourth row of the matrix A
+B[4,]
+```
+
+## Exercise: matrices
+
+```{r, warning=F, message=F}
+# Enter the data in the Excel example above into an matrix called M.
+# 1. Sets up the matrix M and fills it with zeros using the matrix() statement.
+M = matrix(data = NA, nrow = 5, ncol = 2)
+# 2. Enters the appropriate values in the matrix row by row Hint: to enter the first row
+M[1,] = c(1995, 10.0)
+M[2,] = c(1996, 12.5)
+M[3,] = c(1997, 15.6)
+M[4,] = c(1998, 19.5)
+M[5,] = c(1999, 24.4)
+# 3. Outputs the entire matrix
+M
+# 4. Outputs each row
+M[1,]
+M[2,]
+M[3,]
+M[4,]
+M[5,]
+# 5. Outputs each column.
+M[,1]
+M[,2]
+# 6. Finds the largest value in the matrix
+max(M)
+# 7. Finds the average of the second column
+mean(M[,2])
+```
+
+## Exercise: matrices, continued.
+
+```{r, warning=F, message=F}
+# 1. Find the all of the values of column 2 of M that are less than 19.
+M[ M[,2] < 19 ,]
+
+# 2. Find the values of the indices of column 2 of M that are less than 19.
+which(M[,2] < 19)
+
+# 3. Find and output the row that contains the minimum value contained in column 2.
+min_val <- min(M[,2])
+M[ M[,2] == min_val, ]
+
+# 4. Now, to illustrate a particularly devious error, enter the following at the console: M,
+# M[1], M[10], mean(M[1]), mean(M[,1]). Discuss what is going on here with your
+# lab mates. What problems that can arise if you leave out the comma when you intend
+# to index a row or column? When you enter a single subscript (with no comma) for
+# a two dimensional matrix, how is R treating the matrix? Hint: enter the commands
+# length(M), length(M[1,]), length(M[,1]at the console. This is particularly important to understand because it is a source of potential errors that are hard to detect,
+# illustrating that flexible languages like R give you tremendous power—but with that
+# power comes the responsibility to understand what you are doing. Don’t go forward
+# until you really understand this part of the exercise.
+```
+
+## Exercise: matrices
+
+```{r, warning=F, message=F}
+d = numeric(5)
+d
+(d + 1) /3
+length(d)
+print("d is a numeric vector of length 5 with all values set to 0; math can be performed for each value in the vector")
+```
